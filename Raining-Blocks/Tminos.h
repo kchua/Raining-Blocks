@@ -14,27 +14,28 @@ namespace Tminos
 		bool setLocation(int x, int y, Board b);
 		void depositBlocks(Board b);
 
-		enum class Direction {LEFT, RIGHT, DOWN};
+		enum class Direction {LEFT, RIGHT, DOWN, UP}; // Up is for reversal only
 
-		void rotate(Direction dir);
-		void translate(Direction dir);
+		void rotate(Direction dir, Board b);
+		void translate(Direction dir, Board b);
 	private:
 		sf::Color color;
 		int gridSize;
 		std::vector<std::vector<int>> grid;
 		std::pair<int, int> coords;
 
-		bool isValidLocation();
-		void tempRL();
-		void tempRR();
+		Direction negate(Direction dir);
+		void shiftCoords(Direction dir);
+		bool isValidLocation(Board b);
+		void tempRotation(Direction dir);
 	};
 
-	const Tetromino I;
-	const Tetromino J;
-	const Tetromino L;
-	const Tetromino O;
-	const Tetromino T;
-	const Tetromino S;
-	const Tetromino Z;
+	extern Tetromino I;
+	extern Tetromino J;
+	extern Tetromino L;
+	extern Tetromino O;
+	extern Tetromino T;
+	extern Tetromino S;
+	extern Tetromino Z;
 }
 #endif

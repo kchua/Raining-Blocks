@@ -4,6 +4,12 @@
 using namespace std;
 typedef DisjointSets DS;
 
+DS::DisjointSets()
+{
+	parents = vector<int>(4);
+	parents = vector<int>(4);
+}
+
 // Public member functions
 /* Constructs a Disjoint Sets object with N nodes.*/
 DS::DisjointSets(int N) 

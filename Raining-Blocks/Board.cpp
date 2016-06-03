@@ -16,7 +16,7 @@ void Board::removeLine(int line)
 	
 }
 
-bool Board::isOccupied(int x, int y) 
+bool Board::occupiedOrOutOfBounds(int x, int y) 
 {
 	return false;
 }

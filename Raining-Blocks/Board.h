@@ -11,8 +11,10 @@ public:
 	Board();
 	bool isLineClear(int line);
 	void removeLine(int line);
-	bool isOccupied(int x, int y);
+	bool occupiedOrOutOfBounds(int x, int y);
 	void depositBlock(int x, int y, sf::Color color);
+	int getWidth();
+	int getHeight();
 
 private:
 	std::vector<std::vector<sf::Color>> board;

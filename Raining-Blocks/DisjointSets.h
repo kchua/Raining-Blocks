@@ -5,6 +5,7 @@
 
 class DisjointSets {
 public:
+	DisjointSets();
 	DisjointSets(int N);
 	void connect(int a, int b);
 	bool isConnected(int a, int b);
