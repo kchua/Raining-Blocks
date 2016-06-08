@@ -67,6 +67,7 @@ namespace Tminos
 				translate(Direction::LEFT, b);
 				if (!isValidLocation(b))
 				{
+					translate(Direction::RIGHT, b);
 					tempRotation(negate(dir));
 				}
 			}
