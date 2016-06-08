@@ -13,8 +13,6 @@ public:
 	void removeLine(int lineNum);
 	bool occupiedOrOutOfBounds(int x, int y);
 	void depositBlock(int x, int y, sf::Color color);
-	int getWidth();
-	int getHeight();
 
 private:
 	std::vector<std::vector<sf::Color>> board;

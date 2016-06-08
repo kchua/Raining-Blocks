@@ -39,6 +39,19 @@ namespace Tminos
 		return isValidLocation(b);
 	}
 
+	/* Returns a pair of ints indicating the location of the tetromino
+	   in the x-y plane, assuming that its location has been set. */
+	std::pair<int, int> Tminos::Tetromino::getLocation()
+	{
+		return coords;
+	}
+
+	/* Returns the size of the grid in which the tetromino resides. */
+	int Tminos::Tetromino::getGridSize()
+	{
+		return gridSize;
+	}
+
 	/* Places all the blocks of a tetromino on a Board. */
 	void Tminos::Tetromino::depositBlocks(Board b) 
 	{
@@ -175,6 +188,7 @@ namespace Tminos
 			default:
 				throw std::exception("Invalid direction.");
 		}
+		grid = rotated;
 	}
 
 
