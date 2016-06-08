@@ -9,8 +9,8 @@ class Board
 {
 public:
 	Board();
-	bool isLineClear(int line);
-	void removeLine(int line);
+	bool isLineClear(int lineNum);
+	void removeLine(int lineNum);
 	bool occupiedOrOutOfBounds(int x, int y);
 	void depositBlock(int x, int y, sf::Color color);
 	int getWidth();

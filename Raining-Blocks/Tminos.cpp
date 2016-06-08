@@ -181,12 +181,31 @@ namespace Tminos
 	// Standard Tetromino Blocks //
 	///////////////////////////////
 
-	Tetromino Tminos::I (4, { 0, 0, 0, 0,
-							  0, 0, 0, 0,
-						      1, 1, 1, 1,
-					          0, 0, 0, 0 }, sf::Color::Cyan);
+	Tetromino Tminos::I(4, { 0, 0, 0, 0,
+						     1, 1, 1, 1,
+							 0, 0, 0, 0,
+					         0, 0, 0, 0 }, sf::Color::Cyan);
 
 	Tetromino Tminos::J(3, { 1, 0, 0,
-							 1, 1, 1,
+						     1, 1, 1,
 							 0, 0, 0 }, sf::Color::Blue);
+
+	Tetromino Tminos::L(3, { 0, 0, 1,
+							 1, 1, 1,
+							 0, 0, 0 }, sf::Color(250, 150, 100));
+
+	Tetromino Tminos::O(2, { 1, 1,
+							 1, 1 }, sf::Color::Yellow);
+
+	Tetromino Tminos::T(3, { 0, 1, 0,
+							 1, 1, 1,
+							 0, 0, 0 }, sf::Color(153, 0, 153));
+
+	Tetromino Tminos::S(3, { 0, 1, 1,
+							 1, 1, 0,
+							 0, 0, 0 }, sf::Color::Green);
+
+	Tetromino Tminos::Z(3, { 1, 1, 0,
+							 0, 1, 1,
+							 0, 0, 0 }, sf::Color::Red);
 }
