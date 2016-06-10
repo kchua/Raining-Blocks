@@ -58,7 +58,7 @@ namespace Tminos
 	}
 
 	/* Places all the blocks of a tetromino on a Board. */
-	void Tminos::Tetromino::depositBlocks(Board b) 
+	void Tminos::Tetromino::depositBlocks(Board& b) 
 	{
 		for (int i = 0; i < gridSize * gridSize; i++)
 		{
@@ -78,7 +78,7 @@ namespace Tminos
 	   board; assumes that the tetrimino has an established location, and may
 	   result in wall kicks. 
 	*/
-	void Tminos::Tetromino::rotate(Direction dir, Board b)
+	bool Tminos::Tetromino::rotate(Direction dir, Board b)
 	{
 		tempRotation(dir);
 		if (!isValidLocation(b)) 
@@ -92,21 +92,25 @@ namespace Tminos
 				{
 					translate(Direction::RIGHT, b);
 					tempRotation(negate(dir));
+					return false;
 				}
 			}
 		}
+		return true;
 	}
 
 	/* Checks if it is possible to shift a tetromino in a certain direction, 
 	   then shifts the tetromino if the resulting position is valid.
 	*/
-	void Tminos::Tetromino::translate(Direction dir, Board b)
+	bool Tminos::Tetromino::translate(Direction dir, Board b)
 	{
 		shiftCoords(dir);
 		if (!isValidLocation(b)) 
 		{
 			shiftCoords(negate(dir));
+			return false;
 		}
+		return true;
 	}
 
 

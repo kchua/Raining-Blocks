@@ -22,6 +22,9 @@ private:
 
 	std::vector<std::vector<sf::RectangleShape>> display;
 	void render(sf::RenderWindow& window);
+
+	bool inLockPhase;
+	bool locked;
 };
 
 #endif

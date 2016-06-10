@@ -39,25 +39,35 @@ int Game::start(sf::RenderWindow& window)
 
 				case sf::Event::KeyPressed:
 				{
-					if (event.key.code == sf::Keyboard::Left)
+					bool changed = false;
+					switch (event.key.code)
 					{
-						current.translate(Tminos::Tetromino::Direction::LEFT, b);
+						case sf::Keyboard::Left:
+							changed = current.translate(Tminos::Tetromino::Direction::LEFT, b);
+							break;
+
+						case sf::Keyboard::Right:
+							changed = current.translate(Tminos::Tetromino::Direction::RIGHT, b);
+							break;
+
+						case sf::Keyboard::Down:
+							changed = current.translate(Tminos::Tetromino::Direction::DOWN, b);
+							break;
+
+						case sf::Keyboard::Z:
+							changed = current.rotate(Tminos::Tetromino::Direction::LEFT, b);
+							break;
+
+						case sf::Keyboard::C:
+							changed = current.rotate(Tminos::Tetromino::Direction::RIGHT, b);
+							break;
+
+						default:
+							break;
 					}
-					else if (event.key.code == sf::Keyboard::Right)
+					if (changed && inLockPhase)
 					{
-						current.translate(Tminos::Tetromino::Direction::RIGHT, b);
-					}
-					else if (event.key.code == sf::Keyboard::Down)
-					{
-						current.translate(Tminos::Tetromino::Direction::DOWN, b);
-					}
-					else if (event.key.code == sf::Keyboard::Z)
-					{
-						current.rotate(Tminos::Tetromino::Direction::LEFT, b);
-					}
-					else if (event.key.code == sf::Keyboard::C)
-					{
-						current.rotate(Tminos::Tetromino::Direction::RIGHT, b);
+						clock.restart();
 					}
 				}
 
@@ -78,8 +88,19 @@ int Game::start(sf::RenderWindow& window)
 		
 		if (clock.getElapsedTime().asSeconds() > sf::seconds(1).asSeconds())
 		{
-			current.translate(Tminos::Tetromino::Direction::DOWN, b);
+			if (!current.translate(Tminos::Tetromino::Direction::DOWN, b)) {
+				locked = true;
+				current.depositBlocks(b);
+				current = queue.dequeue();
+				current.setLocation(4, 0, b);
+			}
 			std::cout << current.getLocation().first << ", " << current.getLocation().second << std::endl;
+			clock.restart();
+		}
+
+		if (locked) {
+			// Animations and line clearing goes here.
+			locked = false;
 			clock.restart();
 		}
 

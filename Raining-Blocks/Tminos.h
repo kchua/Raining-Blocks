@@ -15,13 +15,13 @@ namespace Tminos
 		std::pair<int, int> getLocation();
 		int getGridSize();
 		sf::Color getColor();
-		void depositBlocks(Board b);
+		void depositBlocks(Board& b);
 		std::vector<int> operator[](int x);
 
 		enum class Direction {LEFT, RIGHT, DOWN, UP}; // Up is for reversal only
 
-		void rotate(Direction dir, Board b);
-		void translate(Direction dir, Board b);
+		bool rotate(Direction dir, Board b);
+		bool translate(Direction dir, Board b);
 
 	private:
 		sf::Color color;
