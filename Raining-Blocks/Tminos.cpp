@@ -52,6 +52,7 @@ namespace Tminos
 		return gridSize;
 	}
 
+	/* Returns the color of a specific tetromino. */
 	sf::Color Tminos::Tetromino::getColor()
 	{
 		return color;
@@ -69,6 +70,7 @@ namespace Tminos
 		}
 	}
 
+	/* Returns a copy of a column vector. */
 	std::vector<int> Tminos::Tetromino::operator[](int x)
 	{
 		return grid[x];

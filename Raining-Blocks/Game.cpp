@@ -4,7 +4,7 @@
 #include <chrono>
 
 Game::Game(sf::RenderWindow& window)
-	: b(), queue(), display(20)
+	: b(), queue(), display(20), next(4)
 {
 	if (!texture.loadFromFile("wallpaper.jpg"))
 	{
@@ -15,6 +15,14 @@ Game::Game(sf::RenderWindow& window)
 	window.clear();
 	current = queue.dequeue();
 	current.setLocation(4, 0, b);
+
+	next[0].setBlockSize(20);
+	next[0].setLocation(800, 75);
+	for (int i = 1; i < 4; i++)
+	{
+		next[i].setBlockSize(16);
+		next[i].setLocation(810, 200 + 100 * (i - 1));
+	}
 
 	window.draw(background);
 	for (int i = 0; i < 20; i++)
@@ -28,6 +36,8 @@ Game::Game(sf::RenderWindow& window)
 			window.draw(display[i][j]);
 		}
 	}
+	updateNext();
+	showNext(window);
 	window.display();
 }
 
@@ -49,19 +59,6 @@ int Game::start(sf::RenderWindow& window)
 		}
 
 		if (locked) {
-			// Animations and line clearing go here.
-// 			int minLineNum = current.getLocation().second;
-// 			for (int i = minLineNum; i < std::min(minLineNum + current.getGridSize(), 22); i++)
-// 			{
-// 				if (b.isLineClear(i))
-// 				{
-// 					b.removeLine(i);
-// 				}
-// 			}
-// 			current = queue.dequeue();
-// 			current.setLocation(4, 0, b);
-// 			locked = false;
-// 			clock.restart();
 			processLock(window);
 		}
 
@@ -69,6 +66,22 @@ int Game::start(sf::RenderWindow& window)
 	}
 
 	return 0;
+}
+
+void Game::updateNext()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		next[i].setTetromino(queue.peek(i));
+	}
+}
+
+void Game::showNext(sf::RenderWindow& window)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		next[i].display(window);
+	}
 }
 
 void Game::render(sf::RenderWindow& window)
@@ -95,6 +108,7 @@ void Game::render(sf::RenderWindow& window)
 			}
 		}
 	}
+	showNext(window);
 	window.display();
 }
 
@@ -160,7 +174,7 @@ inline void Game::processLock(sf::RenderWindow& window)
 			b.removeLine(i);
 			for (int j = 0; j < 10; j++)
 			{
-				display[i - 2][j].setFillColor(sf::Color(20, 20, 20, 150));
+				display[i - 2][j].setFillColor(sf::Color(20, 20, 20, 200));
 				window.draw(display[i - 2][j]);
 				window.display();
 				window.draw(display[i - 2][j]);
@@ -171,6 +185,7 @@ inline void Game::processLock(sf::RenderWindow& window)
 	}
 	current = queue.dequeue();
 	current.setLocation(4, 0, b);
+	updateNext();
 	locked = false;
 	clock.restart();
 }

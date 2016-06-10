@@ -123,6 +123,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="TetrominoBag.cpp" />
+    <ClCompile Include="TminoDisplay.cpp" />
     <ClCompile Include="Tminos.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +131,7 @@
     <ClInclude Include="DisjointSets.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="TetrominoBag.h" />
+    <ClInclude Include="TminoDisplay.h" />
     <ClInclude Include="Tminos.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
