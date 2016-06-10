@@ -33,6 +33,12 @@ void TminoDisplay::setTetromino(Tminos::Tetromino tmino)
 			}
 		}
 	}
+	hasTetromino = true;
+}
+
+Tminos::Tetromino TminoDisplay::getTetromino()
+{
+	return tetromino;
 }
 
 void TminoDisplay::setBlockSize(int size)
@@ -46,31 +52,39 @@ void TminoDisplay::display(sf::RenderWindow& window)
 	background.setPosition(coords.first, coords.second);
 	background.setFillColor(sf::Color(20, 20, 20, 200));
 	window.draw(background);
-
-	int xOrigin = coords.first + (((5 * blockSize + 8) - (cols * (blockSize + 2) - 2)) / 2);
-	int yOrigin = coords.second + (((5 * blockSize + 8) - (rows * (blockSize + 2) - 2)) / 2);
-
-	bool emptyLeadingRow = true;
-
-	for (int i = 0; i < tetromino.getGridSize(); i++)
+	
+	if (hasTetromino)
 	{
-		if (tetromino[i][0] != 0) {
-			emptyLeadingRow = false;
-		}
-	}
+		int xOrigin = coords.first + (((5 * blockSize + 8) - (cols * (blockSize + 2) - 2)) / 2);
+		int yOrigin = coords.second + (((5 * blockSize + 8) - (rows * (blockSize + 2) - 2)) / 2);
 
-	for (int i = 0; i < tetromino.getGridSize(); i++)
-	{
-		for (int j = (emptyLeadingRow) ? 1 : 0; j < tetromino.getGridSize(); j++)
+		bool emptyLeadingRow = true;
+
+		for (int i = 0; i < tetromino.getGridSize(); i++)
 		{
-			if (tetromino[i][j] != 0)
+			if (tetromino[i][0] != 0) {
+				emptyLeadingRow = false;
+			}
+		}
+
+		for (int i = 0; i < tetromino.getGridSize(); i++)
+		{
+			for (int j = (emptyLeadingRow) ? 1 : 0; j < tetromino.getGridSize(); j++)
 			{
-				sf::RectangleShape rectangle(sf::Vector2f(blockSize, blockSize));
-				rectangle.setPosition(xOrigin + (blockSize + 2) * i, 
-					yOrigin + (blockSize + 2) * (j - ((emptyLeadingRow) ? 1 : 0)));
-				rectangle.setFillColor(tetromino.getColor());
-				window.draw(rectangle);
+				if (tetromino[i][j] != 0)
+				{
+					sf::RectangleShape rectangle(sf::Vector2f(blockSize, blockSize));
+					rectangle.setPosition(xOrigin + (blockSize + 2) * i,
+						yOrigin + (blockSize + 2) * (j - ((emptyLeadingRow) ? 1 : 0)));
+					rectangle.setFillColor(tetromino.getColor());
+					window.draw(rectangle);
+				}
 			}
 		}
 	}
+}
+
+bool TminoDisplay::hasContents()
+{
+	return hasTetromino;
 }

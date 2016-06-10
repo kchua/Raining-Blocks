@@ -11,12 +11,15 @@ public:
 
 	void setLocation(int x, int y);
 	void setTetromino(Tminos::Tetromino tmino);
+	Tminos::Tetromino getTetromino();
 	void setBlockSize(int size);
+	bool hasContents();
 
 	void display(sf::RenderWindow& window);
 
 private:
 	Tminos::Tetromino tetromino = Tminos::O;
+	bool hasTetromino;
 	int rows; int cols;
 	std::pair<int, int> coords;
 	int blockSize;

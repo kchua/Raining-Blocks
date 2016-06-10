@@ -18,7 +18,7 @@ Board::Board()
 	{
 		for (int j = 0; j < 22; j++)
 		{
-			board[j][i] = sf::Color(20, 20, 20, 40);
+			board[j][i] = sf::Color(20, 20, 20, 100);
 		}
 	}
 	for (int i = 0; i < 20; i++)
@@ -53,7 +53,7 @@ void Board::removeLine(int lineNum)
 	board[0][0] = board[0][11] = sf::Color(255, 255, 255, 0);
 	for (int i = 1; i < 11; i++)
 	{
-		board[0][i] = sf::Color(20, 20, 20, 40);
+		board[0][i] = sf::Color(20, 20, 20, 100);
 	}
 }
 
@@ -63,7 +63,7 @@ bool Board::occupiedOrOutOfBounds(int x, int y)
 {
 	if (x < 12 && y < 23)
 	{
-		return board[y][x] != sf::Color(20, 20, 20, 40);
+		return board[y][x] != sf::Color(20, 20, 20, 100);
 	}
 	return true;
 }
@@ -73,11 +73,14 @@ bool Board::occupiedOrOutOfBounds(int x, int y)
 void Board::depositBlock(int x, int y, sf::Color color)
 {
 	board[y][x] = color;
-	for (int i : std::vector<int>{ 1, -1 })
+	if (y > 2)
 	{
-		if (occupiedOrOutOfBounds(x + i, y))
+		for (int i : std::vector<int>{ 1, -1 })
 		{
-			lines[y - 2].connect(x, x + i);
+			if (occupiedOrOutOfBounds(x + i, y))
+			{
+				lines[y - 2].connect(x, x + i);
+			}
 		}
 	}
 }

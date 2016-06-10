@@ -24,15 +24,18 @@ Game::Game(sf::RenderWindow& window)
 		next[i].setLocation(810, 200 + 100 * (i - 1));
 	}
 
+	hold.setBlockSize(20);
+	hold.setLocation(85, 75);
+
 	window.draw(background);
 	for (int i = 0; i < 20; i++)
 	{
 		display[i] = std::vector<sf::RectangleShape>(12);
 		for (int j = 0; j < 10; j++)
 		{
-			display[i][j] = sf::RectangleShape(sf::Vector2f(50, 50));
+			display[i][j] = sf::RectangleShape(sf::Vector2f(45, 45));
 			display[i][j].setPosition(500 - 259 + 52 * j, 75 + 52 * i);
-			display[i][j].setFillColor(sf::Color(20, 20, 20, 40));
+			display[i][j].setFillColor(sf::Color(20, 20, 20, 100));
 			window.draw(display[i][j]);
 		}
 	}
@@ -60,6 +63,7 @@ int Game::start(sf::RenderWindow& window)
 
 		if (locked) {
 			processLock(window);
+			usedHold = false;
 		}
 
 		render(window);
@@ -109,6 +113,7 @@ void Game::render(sf::RenderWindow& window)
 		}
 	}
 	showNext(window);
+	hold.display(window);
 	window.display();
 }
 
@@ -149,6 +154,30 @@ inline void Game::processEvents(sf::RenderWindow& window)
 				changed = current.rotate(Tminos::Tetromino::Direction::RIGHT, b);
 				break;
 
+			case sf::Keyboard::X:
+				if (!usedHold)
+				{
+					if (!hold.hasContents()) {
+						hold.setTetromino(current);
+						current = queue.dequeue();
+						updateNext();	
+					}
+					else
+					{
+						Tminos::Tetromino temp = hold.getTetromino();
+						hold.setTetromino(current);
+						current = temp;						
+					}
+
+					if (!current.setLocation(4, 0, b)) // Game Over
+					{
+						window.close();
+					}
+					locked = false;
+					usedHold = true;
+					clock.restart();
+				}
+
 			default:
 				break;
 			}
@@ -167,7 +196,7 @@ inline void Game::processEvents(sf::RenderWindow& window)
 inline void Game::processLock(sf::RenderWindow& window)
 {
 	int minLineNum = current.getLocation().second;
-	for (int i = minLineNum; i < std::min(minLineNum + current.getGridSize(), 22); i++)
+	for (int i = std::max(minLineNum, 2); i < std::min(minLineNum + current.getGridSize(), 22); i++)
 	{
 		if (b.isLineClear(i))
 		{
@@ -184,7 +213,10 @@ inline void Game::processLock(sf::RenderWindow& window)
 		}
 	}
 	current = queue.dequeue();
-	current.setLocation(4, 0, b);
+	if (!current.setLocation(4, 0, b)) // Game Over
+	{
+		window.close();
+	}
 	updateNext();
 	locked = false;
 	clock.restart();

@@ -26,7 +26,9 @@ private:
 	Tminos::Tetromino current = Tminos::O; // dummy Tetromino
 
 	std::vector<TminoDisplay> next;
+
 	TminoDisplay hold;
+	bool usedHold;
 
 	void updateNext();
 	void showNext(sf::RenderWindow& window);
