@@ -14,7 +14,10 @@ public:
 	int start(sf::RenderWindow& window);
 
 private:
+	sf::Texture texture;
+	sf::Sprite background;
 	sf::RenderWindow window;
+	sf::Clock clock;
 
 	Board b;
 	TetrominoBag queue;
@@ -22,6 +25,10 @@ private:
 
 	std::vector<std::vector<sf::RectangleShape>> display;
 	void render(sf::RenderWindow& window);
+
+	void processEvents(sf::RenderWindow& window);
+
+	void processLock(sf::RenderWindow& window);
 
 	bool inLockPhase;
 	bool locked;

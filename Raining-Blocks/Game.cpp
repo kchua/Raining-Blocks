@@ -1,20 +1,30 @@
 #include "Game.h"
 #include <algorithm>
+#include <thread>
+#include <chrono>
 
 Game::Game(sf::RenderWindow& window)
 	: b(), queue(), display(20)
 {
-	window.clear(sf::Color::White);
+	if (!texture.loadFromFile("wallpaper.jpg"))
+	{
+		throw std::exception("Image not found.");
+	}
+	background = sf::Sprite(texture);
+
+	window.clear();
 	current = queue.dequeue();
 	current.setLocation(4, 0, b);
 
+	window.draw(background);
 	for (int i = 0; i < 20; i++)
 	{
 		display[i] = std::vector<sf::RectangleShape>(12);
 		for (int j = 0; j < 10; j++)
 		{
 			display[i][j] = sf::RectangleShape(sf::Vector2f(50, 50));
-			display[i][j].setPosition(400 - 259 + 52 * j, 52 * i);
+			display[i][j].setPosition(500 - 259 + 52 * j, 75 + 52 * i);
+			display[i][j].setFillColor(sf::Color(20, 20, 20, 40));
 			window.draw(display[i][j]);
 		}
 	}
@@ -23,69 +33,12 @@ Game::Game(sf::RenderWindow& window)
 
 int Game::start(sf::RenderWindow& window)
 {
-	sf::Clock clock;
+	clock.restart();
 
 	while (window.isOpen())
 	{
-		sf::Event event;
+		processEvents(window);
 
-		while (window.pollEvent(event))
-		{
-			switch (event.type)
-			{
-				case sf::Event::Closed:
-					window.close();
-					break;
-
-				case sf::Event::KeyPressed:
-				{
-					bool changed = false;
-					switch (event.key.code)
-					{
-						case sf::Keyboard::Left:
-							changed = current.translate(Tminos::Tetromino::Direction::LEFT, b);
-							break;
-
-						case sf::Keyboard::Right:
-							changed = current.translate(Tminos::Tetromino::Direction::RIGHT, b);
-							break;
-
-						case sf::Keyboard::Down:
-							changed = current.translate(Tminos::Tetromino::Direction::DOWN, b);
-							break;
-
-						case sf::Keyboard::Z:
-							changed = current.rotate(Tminos::Tetromino::Direction::LEFT, b);
-							break;
-
-						case sf::Keyboard::C:
-							changed = current.rotate(Tminos::Tetromino::Direction::RIGHT, b);
-							break;
-
-						default:
-							break;
-					}
-					if (changed && inLockPhase)
-					{
-						clock.restart();
-					}
-				}
-
-				default:
-					break;
-			}	
-		}
-
-		/*
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			current.translate(Tminos::Tetromino::Direction::LEFT, b);V
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-			current.translate(Tminos::Tetromino::Direction::RIGHT, b);
-		}*/
-		
 		if (clock.getElapsedTime().asSeconds() > sf::seconds(0.5).asSeconds())
 		{
 			if (!current.translate(Tminos::Tetromino::Direction::DOWN, b)) {
@@ -97,18 +50,19 @@ int Game::start(sf::RenderWindow& window)
 
 		if (locked) {
 			// Animations and line clearing go here.
-			int minLineNum = current.getLocation().second;
-			for (int i = minLineNum; i < std::min(minLineNum + current.getGridSize(), 22); i++)
-			{
-				if (b.isLineClear(i))
-				{
-					b.removeLine(i);
-				}
-			}
-			current = queue.dequeue();
-			current.setLocation(4, 0, b);
-			locked = false;
-			clock.restart();
+// 			int minLineNum = current.getLocation().second;
+// 			for (int i = minLineNum; i < std::min(minLineNum + current.getGridSize(), 22); i++)
+// 			{
+// 				if (b.isLineClear(i))
+// 				{
+// 					b.removeLine(i);
+// 				}
+// 			}
+// 			current = queue.dequeue();
+// 			current.setLocation(4, 0, b);
+// 			locked = false;
+// 			clock.restart();
+			processLock(window);
 		}
 
 		render(window);
@@ -119,7 +73,8 @@ int Game::start(sf::RenderWindow& window)
 
 void Game::render(sf::RenderWindow& window)
 {
-	window.clear(sf::Color::White);
+	window.clear();
+	window.draw(background);
 	for (int x = 0; x < 10; x++)
 	{
 		for (int y = 0; y < 20; y++)
@@ -143,9 +98,86 @@ void Game::render(sf::RenderWindow& window)
 	window.display();
 }
 
+inline void Game::processEvents(sf::RenderWindow& window)
+{
+	sf::Event event;
+
+	while (window.pollEvent(event))
+	{
+		switch (event.type)
+		{
+		case sf::Event::Closed:
+			window.close();
+			break;
+
+		case sf::Event::KeyPressed:
+		{
+			bool changed = false;
+			switch (event.key.code)
+			{
+			case sf::Keyboard::Left:
+				changed = current.translate(Tminos::Tetromino::Direction::LEFT, b);
+				break;
+
+			case sf::Keyboard::Right:
+				changed = current.translate(Tminos::Tetromino::Direction::RIGHT, b);
+				break;
+
+			case sf::Keyboard::Down:
+				changed = current.translate(Tminos::Tetromino::Direction::DOWN, b);
+				break;
+
+			case sf::Keyboard::Z:
+				changed = current.rotate(Tminos::Tetromino::Direction::LEFT, b);
+				break;
+
+			case sf::Keyboard::C:
+				changed = current.rotate(Tminos::Tetromino::Direction::RIGHT, b);
+				break;
+
+			default:
+				break;
+			}
+			if (changed && inLockPhase)
+			{
+				clock.restart();
+			}
+		}
+
+		default:
+			break;
+		}
+	}
+}
+
+inline void Game::processLock(sf::RenderWindow& window)
+{
+	int minLineNum = current.getLocation().second;
+	for (int i = minLineNum; i < std::min(minLineNum + current.getGridSize(), 22); i++)
+	{
+		if (b.isLineClear(i))
+		{
+			b.removeLine(i);
+			for (int j = 0; j < 10; j++)
+			{
+				display[i - 2][j].setFillColor(sf::Color(20, 20, 20, 150));
+				window.draw(display[i - 2][j]);
+				window.display();
+				window.draw(display[i - 2][j]);
+				window.display();
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+		}
+	}
+	current = queue.dequeue();
+	current.setLocation(4, 0, b);
+	locked = false;
+	clock.restart();
+}
+
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(800, 1200), "Tetris");
+	sf::RenderWindow window(sf::VideoMode(1000, 1200), "Tetris");
 	Game game(window);
 	sf::Music music;
 
