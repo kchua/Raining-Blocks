@@ -14,7 +14,9 @@ namespace Tminos
 		bool setLocation(int x, int y, Board b);
 		std::pair<int, int> getLocation();
 		int getGridSize();
+		sf::Color getColor();
 		void depositBlocks(Board b);
+		std::vector<int> operator[](int x);
 
 		enum class Direction {LEFT, RIGHT, DOWN, UP}; // Up is for reversal only
 

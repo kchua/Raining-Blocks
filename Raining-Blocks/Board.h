@@ -13,6 +13,7 @@ public:
 	void removeLine(int lineNum);
 	bool occupiedOrOutOfBounds(int x, int y);
 	void depositBlock(int x, int y, sf::Color color);
+	std::vector<sf::Color> operator[](int y);
 
 private:
 	std::vector<std::vector<sf::Color>> board;

@@ -1,4 +1,5 @@
 #include "Board.h"
+#include <iostream>
 
 /* Constructor for the board class. */
 Board::Board()
@@ -7,11 +8,18 @@ Board::Board()
 	for (int i = 0; i < 23; i++)
 	{
 		board[i] = std::vector<sf::Color>(12);
-		board[i][0] = board[i][11] = sf::Color::Black;	
+		board[i][0] = board[i][11] = sf::Color(255, 255, 255, 0);	
 	}
 	for (int i = 0; i < 12; i++)
 	{
-		board[22][i] = sf::Color::Black;
+		board[22][i] = sf::Color(255, 255, 255, 0);
+	}
+	for (int i = 1; i < 11; i++)
+	{
+		for (int j = 0; j < 22; j++)
+		{
+			board[j][i] = sf::Color(20, 20, 20, 40);
+		}
 	}
 	for (int i = 0; i < 20; i++)
 	{
@@ -46,9 +54,9 @@ void Board::removeLine(int lineNum)
    out of bounds.*/
 bool Board::occupiedOrOutOfBounds(int x, int y) 
 {
-	if (x < 10 && y < 20)
+	if (x < 12 && y < 23)
 	{
-		return board[2 + y][1 + x] != sf::Color::Transparent;
+		return board[y][x] != sf::Color(20, 20, 20, 40);
 	}
 	return true;
 }
@@ -57,5 +65,11 @@ bool Board::occupiedOrOutOfBounds(int x, int y)
    another block in the given coordinate). */
 void Board::depositBlock(int x, int y, sf::Color color)
 {
-	board[2 + y][1 + x] = color;
+	board[y][x] = color;
 }
+
+std::vector<sf::Color> Board::operator[](int y)
+{
+	return board[y];
+}
+

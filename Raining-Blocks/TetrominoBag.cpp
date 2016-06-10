@@ -1,5 +1,7 @@
 #include "TetrominoBag.h"
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
 
 TetrominoBag::TetrominoBag()
 	: queue()
@@ -29,6 +31,7 @@ Tminos::Tetromino TetrominoBag::peek(int index)
 
 void TetrominoBag::regenerate()
 {
+	srand(std::time(0));
 	std::vector<Tminos::Tetromino> newSet{ Tminos::I, Tminos::J, Tminos::L, 
 		Tminos::O, Tminos::S, Tminos::T, Tminos::Z };
 	std::random_shuffle(newSet.begin(), newSet.end());

@@ -52,6 +52,11 @@ namespace Tminos
 		return gridSize;
 	}
 
+	sf::Color Tminos::Tetromino::getColor()
+	{
+		return color;
+	}
+
 	/* Places all the blocks of a tetromino on a Board. */
 	void Tminos::Tetromino::depositBlocks(Board b) 
 	{
@@ -62,6 +67,11 @@ namespace Tminos
 				b.depositBlock(coords.first + (i % gridSize), coords.second + (i / gridSize), color);
 			}
 		}
+	}
+
+	std::vector<int> Tminos::Tetromino::operator[](int x)
+	{
+		return grid[x];
 	}
 
 	/* Rotates a tetromino if the resulting configuration is valid for the given
@@ -119,7 +129,7 @@ namespace Tminos
 			return Direction::RIGHT;
 
 		default:
-			return Direction::RIGHT;
+			return Direction::LEFT;
 		}
 	}
 
@@ -171,16 +181,16 @@ namespace Tminos
 		{
 			case Direction::LEFT:
 				for (int i = 0; i < gridSize * gridSize; i++) {
-					int x = i % 4;
-					int y = i / 4;
+					int x = i % gridSize;
+					int y = i / gridSize;
 					rotated[y][gridSize - 1 - x] = grid[x][y];
 				}
 				break;
 
 			case Direction::RIGHT:
 				for (int i = 0; i < gridSize * gridSize; i++) {
-					int x = i % 4;
-					int y = i / 4;
+					int x = i % gridSize;
+					int y = i / gridSize;
 					rotated[gridSize - 1 - y][x] = grid[x][y];
 				}
 				break;

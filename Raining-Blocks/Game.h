@@ -21,8 +21,7 @@ private:
 	Tminos::Tetromino current = Tminos::O; // dummy Tetromino
 
 	std::vector<std::vector<sf::RectangleShape>> display;
-
-	void render();
+	void render(sf::RenderWindow& window);
 };
 
 #endif
