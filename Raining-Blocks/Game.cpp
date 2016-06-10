@@ -1,5 +1,5 @@
 #include "Game.h"
-#include <iostream>
+#include <algorithm>
 
 Game::Game(sf::RenderWindow& window)
 	: b(), queue(), display(20)
@@ -13,8 +13,8 @@ Game::Game(sf::RenderWindow& window)
 		display[i] = std::vector<sf::RectangleShape>(12);
 		for (int j = 0; j < 10; j++)
 		{
-			display[i][j] = sf::RectangleShape(sf::Vector2f(30, 30));
-			display[i][j].setPosition(400 - 159 + 32 * j, 32 * i);
+			display[i][j] = sf::RectangleShape(sf::Vector2f(50, 50));
+			display[i][j].setPosition(400 - 259 + 52 * j, 52 * i);
 			window.draw(display[i][j]);
 		}
 	}
@@ -86,20 +86,27 @@ int Game::start(sf::RenderWindow& window)
 			current.translate(Tminos::Tetromino::Direction::RIGHT, b);
 		}*/
 		
-		if (clock.getElapsedTime().asSeconds() > sf::seconds(1).asSeconds())
+		if (clock.getElapsedTime().asSeconds() > sf::seconds(0.5).asSeconds())
 		{
 			if (!current.translate(Tminos::Tetromino::Direction::DOWN, b)) {
 				locked = true;
 				current.depositBlocks(b);
-				current = queue.dequeue();
-				current.setLocation(4, 0, b);
 			}
-			std::cout << current.getLocation().first << ", " << current.getLocation().second << std::endl;
 			clock.restart();
 		}
 
 		if (locked) {
-			// Animations and line clearing goes here.
+			// Animations and line clearing go here.
+			int minLineNum = current.getLocation().second;
+			for (int i = minLineNum; i < std::min(minLineNum + current.getGridSize(), 22); i++)
+			{
+				if (b.isLineClear(i))
+				{
+					b.removeLine(i);
+				}
+			}
+			current = queue.dequeue();
+			current.setLocation(4, 0, b);
 			locked = false;
 			clock.restart();
 		}
@@ -138,7 +145,7 @@ void Game::render(sf::RenderWindow& window)
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(800, 800), "Tetris");
+	sf::RenderWindow window(sf::VideoMode(800, 1200), "Tetris");
 	Game game(window);
 	sf::Music music;
 
