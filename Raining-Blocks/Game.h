@@ -38,6 +38,7 @@ private:
 		void addLines(int inc);
 		int getScore();
 		int getLines();
+		int getLevel();
 		void display(sf::RenderWindow& window);
 	private:
 		int score;
@@ -48,8 +49,10 @@ private:
 		sf::RectangleShape back;
 		sf::Text scoreLabel;
 		sf::Text linesLabel;
+		sf::Text levelLabel;
 		sf::Text scoreText;
 		sf::Text linesText;
+		sf::Text levelText;
 
 		void resetOrigin(sf::Text& text);
 	} scores;
