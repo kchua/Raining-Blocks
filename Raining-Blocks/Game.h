@@ -11,7 +11,7 @@
 class Game
 {
 public:
-	Game(sf::RenderWindow& window);
+	Game(sf::RenderWindow& window, sf::Font font);
 	int start(sf::RenderWindow& window);
 
 private:
@@ -29,6 +29,30 @@ private:
 
 	TminoDisplay hold;
 	bool usedHold;
+
+	class ScoreBoard
+	{
+	public:
+		ScoreBoard(int x, int y, sf::Font& f);
+		void addScore(int inc);
+		void addLines(int inc);
+		int getScore();
+		int getLines();
+		void display(sf::RenderWindow& window);
+	private:
+		int score;
+		int lines;
+		sf::Font font;
+
+		std::pair<int, int> coords;
+		sf::RectangleShape back;
+		sf::Text scoreLabel;
+		sf::Text linesLabel;
+		sf::Text scoreText;
+		sf::Text linesText;
+
+		void resetOrigin(sf::Text& text);
+	} scores;
 
 	void updateNext();
 	void showNext(sf::RenderWindow& window);

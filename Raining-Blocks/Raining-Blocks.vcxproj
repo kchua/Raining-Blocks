@@ -121,6 +121,7 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="DisjointSets.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="ScoreBoard.cpp" />
     <ClCompile Include="TetrominoBag.cpp" />
     <ClCompile Include="TminoDisplay.cpp" />
     <ClCompile Include="Tminos.cpp" />

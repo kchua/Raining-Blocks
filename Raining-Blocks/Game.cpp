@@ -3,8 +3,8 @@
 #include <thread>
 #include <chrono>
 
-Game::Game(sf::RenderWindow& window)
-	: b(), queue(), display(20), next(4)
+Game::Game(sf::RenderWindow& window, sf::Font font)
+	: b(), queue(), display(20), next(4), scores(20, 500, font)
 {
 	if (!texture.loadFromFile("wallpaper.jpg"))
 	{
@@ -25,7 +25,7 @@ Game::Game(sf::RenderWindow& window)
 	}
 
 	hold.setBlockSize(20);
-	hold.setLocation(85, 75);
+	hold.setLocation(65, 75);
 
 	window.draw(background);
 	for (int i = 0; i < 20; i++)
@@ -41,6 +41,7 @@ Game::Game(sf::RenderWindow& window)
 	}
 	updateNext();
 	showNext(window);
+	scores.display(window);
 	window.display();
 }
 
@@ -72,7 +73,7 @@ int Game::start(sf::RenderWindow& window)
 	return 0;
 }
 
-void Game::updateNext()
+inline void Game::updateNext()
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -80,7 +81,7 @@ void Game::updateNext()
 	}
 }
 
-void Game::showNext(sf::RenderWindow& window)
+inline void Game::showNext(sf::RenderWindow& window)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -88,7 +89,7 @@ void Game::showNext(sf::RenderWindow& window)
 	}
 }
 
-void Game::render(sf::RenderWindow& window)
+inline void Game::render(sf::RenderWindow& window)
 {
 	window.clear();
 	window.draw(background);
@@ -114,6 +115,7 @@ void Game::render(sf::RenderWindow& window)
 	}
 	showNext(window);
 	hold.display(window);
+	scores.display(window);
 	window.display();
 }
 
@@ -144,6 +146,10 @@ inline void Game::processEvents(sf::RenderWindow& window)
 
 			case sf::Keyboard::Down:
 				changed = current.translate(Tminos::Tetromino::Direction::DOWN, b);
+				if (changed)
+				{
+					scores.addScore(10);
+				}
 				break;
 
 			case sf::Keyboard::Z:
@@ -181,10 +187,6 @@ inline void Game::processEvents(sf::RenderWindow& window)
 			default:
 				break;
 			}
-			if (changed && inLockPhase)
-			{
-				clock.restart();
-			}
 		}
 
 		default:
@@ -210,6 +212,7 @@ inline void Game::processLock(sf::RenderWindow& window)
 				window.display();
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			}
+			scores.addLines(1);
 		}
 	}
 	current = queue.dequeue();
@@ -225,15 +228,21 @@ inline void Game::processLock(sf::RenderWindow& window)
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1000, 1200), "Tetris");
-	Game game(window);
 	sf::Music music;
+	sf::Font font;
 
 	if (!music.openFromFile("tetris.ogg")) {
+		return -1;
+	}
+
+	if (!font.loadFromFile("Gasalt-Regular.ttf")) {
 		return -1;
 	}
 	
 	music.setLoop(true);
 	music.play();
+
+	Game game(window, font);
 
 	game.start(window);
 }
