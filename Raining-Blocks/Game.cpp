@@ -3,7 +3,7 @@
 #include <thread>
 #include <chrono>
 
-Game::Game(sf::RenderWindow& window, sf::Font font)
+Game::Game(sf::RenderWindow& window, sf::Font& font)
 	: b(), queue(), display(20), next(4), scores(200, 450, font)
 {
 	const int blockSize = 48;                                                             // Reduce magic numbers, easy window resizing.
@@ -33,11 +33,23 @@ Game::Game(sf::RenderWindow& window, sf::Font font)
 		next[i].setBlockSize(smallDisplaySize);
 		next[i].setLocation(
 			halfField + screenMiddle + largeDisplayOffset + 5 * (largeDisplaySize - smallDisplaySize) / 2,
-			375 + 125 * (i - 1));
+			385 + 135 * (i - 1));
 	}
+	nextText.setFont(font);
+	nextText.setColor(sf::Color::White);
+	nextText.setCharacterSize(60);
+	nextText.setString("Next");
+	nextText.setPosition(6 + screenMiddle + halfField + (screenMiddle - halfField) / 2, 125);
+	nextText.setOrigin(sf::Vector2f(nextText.getLocalBounds().width / 2, nextText.getLocalBounds().height / 2));
 
 	hold.setBlockSize(largeDisplaySize);
 	hold.setLocation(largeDisplayOffset, 200);
+	holdText.setFont(font);
+	holdText.setColor(sf::Color::White);
+	holdText.setCharacterSize(60);
+	holdText.setString("Hold");
+	holdText.setPosition(6 + (screenMiddle - halfField) / 2, 125);
+	holdText.setOrigin(sf::Vector2f(holdText.getLocalBounds().width / 2, holdText.getLocalBounds().height / 2));
 
 	window.clear();
 	window.draw(background);
@@ -54,6 +66,8 @@ Game::Game(sf::RenderWindow& window, sf::Font font)
 			window.draw(display[i][j]);
 		}
 	}
+	hold.display(window);
+	window.draw(holdText);
 	showNext(window);
 	scores.display(window);
 	window.display();
@@ -115,6 +129,7 @@ inline void Game::showNext(sf::RenderWindow& window)
 	{
 		next[i].display(window);
 	}
+	window.draw(nextText);
 }
 
 inline void Game::render(sf::RenderWindow& window)
@@ -143,6 +158,7 @@ inline void Game::render(sf::RenderWindow& window)
 	}
 	showNext(window);
 	hold.display(window);
+	window.draw(holdText);
 	scores.display(window);
 	window.display();
 }
@@ -276,7 +292,7 @@ inline bool Game::currentMovableUnderGravity()
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1300, 1200), "Tetris");
+	sf::RenderWindow window(sf::VideoMode(1200, 1200), "Tetris");
 	sf::Music music;
 	sf::Font font;
 

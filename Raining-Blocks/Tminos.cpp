@@ -100,17 +100,17 @@ namespace Tminos
 						if (!isValidLocation(b))
 						{
 							coords = std::pair<int, int>(coords.first + 1, coords.second);
-							coords = std::pair<int, int>(coords.first + 1, coords.second - 1);
+							coords = std::pair<int, int>(coords.first + 1, coords.second + 1);
 							if (!hasFloorKicked)
 							{
 								while (!isValidLocation(b))
 								{
-									coords = std::pair<int, int>(coords.first, coords.second + 1);
+									coords = std::pair<int, int>(coords.first, coords.second - 1);
 								}
 								hasFloorKicked = true;
 								return true;
 							}
-							coords = std::pair<int, int>(coords.first, coords.second + 1);
+							coords = std::pair<int, int>(coords.first, coords.second - 1);
 							tempRotation(negate(dir));
 							return false;
 						}

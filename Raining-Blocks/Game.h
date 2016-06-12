@@ -11,7 +11,7 @@
 class Game
 {
 public:
-	Game(sf::RenderWindow& window, sf::Font font);
+	Game(sf::RenderWindow& window, sf::Font& font);
 	int start(sf::RenderWindow& window);
 
 private:
@@ -26,9 +26,11 @@ private:
 	Tminos::Tetromino current = Tminos::O; // dummy Tetromino
 
 	std::vector<TminoDisplay> next;
+	sf::Text nextText;
 
 	TminoDisplay hold;
 	bool usedHold;
+	sf::Text holdText;
 
 	class ScoreBoard
 	{

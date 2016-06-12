@@ -49,6 +49,8 @@ void TminoDisplay::setBlockSize(int size)
 void TminoDisplay::display(sf::RenderWindow& window)
 {
 	sf::RectangleShape background(sf::Vector2f(5 * blockSize + 8, 5 * blockSize + 8));
+	background.setOutlineThickness(0.75);
+	background.setOutlineColor(sf::Color::White);
 	background.setPosition(coords.first, coords.second);
 	background.setFillColor(sf::Color(20, 20, 20, 200));
 	window.draw(background);
