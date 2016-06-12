@@ -85,16 +85,36 @@ namespace Tminos
 		tempRotation(dir);
 		if (!isValidLocation(b)) 
 		{
-			translate(Direction::RIGHT, b);
+			coords = std::pair<int, int>(coords.first + 1, coords.second);
 			if (!isValidLocation(b)) 
 			{
-				translate(Direction::LEFT, b);
-				translate(Direction::LEFT, b);
+				coords = std::pair<int, int>(coords.first + 1, coords.second);
 				if (!isValidLocation(b))
 				{
-					translate(Direction::RIGHT, b);
-					tempRotation(negate(dir));
-					return false;
+					coords = std::pair<int, int>(coords.first - 1, coords.second);
+					coords = std::pair<int, int>(coords.first - 1, coords.second);
+					coords = std::pair<int, int>(coords.first - 1, coords.second);
+					if (!isValidLocation(b))
+					{
+						coords = std::pair<int, int>(coords.first - 1, coords.second);
+						if (!isValidLocation(b))
+						{
+							coords = std::pair<int, int>(coords.first + 1, coords.second);
+							coords = std::pair<int, int>(coords.first + 1, coords.second - 1);
+							if (!hasFloorKicked)
+							{
+								while (!isValidLocation(b))
+								{
+									coords = std::pair<int, int>(coords.first, coords.second + 1);
+								}
+								hasFloorKicked = true;
+								return true;
+							}
+							coords = std::pair<int, int>(coords.first, coords.second + 1);
+							tempRotation(negate(dir));
+							return false;
+						}
+					}
 				}
 			}
 		}

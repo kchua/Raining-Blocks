@@ -31,6 +31,7 @@ namespace Tminos
 		int rotationConfiguration;
 		std::vector<std::vector<int>> grid;
 		std::pair<int, int> coords;
+		bool hasFloorKicked = false;
 
 		Direction negate(Direction dir);
 		void shiftCoords(Direction dir);

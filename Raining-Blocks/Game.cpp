@@ -78,7 +78,7 @@ int Game::start(sf::RenderWindow& window)
 		}
 
 		if (inLockPhase) {
-			if (clock.getElapsedTime().asSeconds() > sf::seconds(1).asSeconds())
+			if (clock.getElapsedTime().asSeconds() > sf::seconds(0.5).asSeconds())
 			{
 				current.depositBlocks(b);
 				processLock(window);
@@ -257,7 +257,7 @@ inline void Game::processLock(sf::RenderWindow& window)
 	}
 	updateNext();
 	inLockPhase = false;
-	std::this_thread::sleep_for(std::chrono::milliseconds(250));
+	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	clock.restart();
 }
 
