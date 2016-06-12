@@ -61,7 +61,7 @@ void Board::removeLine(int lineNum)
    out of bounds.*/
 bool Board::occupiedOrOutOfBounds(int x, int y) 
 {
-	if (x < 12 && y < 23)
+	if ((0 <= x && x < 12) && (0 <= y && y < 23))
 	{
 		return board[y][x] != sf::Color(20, 20, 20, 100);
 	}

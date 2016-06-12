@@ -173,7 +173,7 @@ namespace Tminos
 	/* Checks if the current location of a tetromino is valid. */
 	bool Tminos::Tetromino::isValidLocation(Board b)
 	{
-		for (int i = 0; i < gridSize * gridSize; i++)
+	for (int i = 0; i < gridSize * gridSize; i++)
 		{
 			if (grid[i % gridSize][i / gridSize] != 0
 				&& b.occupiedOrOutOfBounds(coords.first + (i % gridSize), coords.second + (i / gridSize)))

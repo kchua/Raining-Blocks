@@ -163,6 +163,7 @@ inline void Game::processEvents(sf::RenderWindow& window)
 				if (changed)
 				{
 					scores.addScore(10);
+					clock.restart();
 				}
 				break;
 
@@ -237,6 +238,7 @@ inline void Game::processLock(sf::RenderWindow& window)
 	}
 	updateNext();
 	locked = false;
+	std::this_thread::sleep_for(std::chrono::milliseconds(250));
 	clock.restart();
 }
 
