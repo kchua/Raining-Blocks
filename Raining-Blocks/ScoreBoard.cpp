@@ -48,10 +48,10 @@ Game::ScoreBoard::ScoreBoard(int x, int y, sf::Font& f)
 	levelText.setCharacterSize(50);
 	resetOrigin(levelText);
 
-	scoreLabel.setPosition(coords.first + 100, coords.second + 10);
+	scoreLabel.setPosition(coords.first + 100, coords.second + 20);
 	linesLabel.setPosition(coords.first + 100, coords.second + 160);
 	levelLabel.setPosition(coords.first + 100, coords.second + 310);
-	scoreText.setPosition(coords.first + 100, coords.second + 60);
+	scoreText.setPosition(coords.first + 100, coords.second + 75);
 	linesText.setPosition(coords.first + 100, coords.second + 210);
 	levelText.setPosition(coords.first + 100, coords.second + 370);
 

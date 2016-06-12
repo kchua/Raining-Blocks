@@ -22,11 +22,13 @@ namespace Tminos
 		bool setLocation(int x, int y, Board b);
 		void depositBlocks(Board& b);
 		bool rotate(Direction dir, Board b);
+		void resetRotation();
 		bool translate(Direction dir, Board b);
 
 	private:
 		sf::Color color;
 		int gridSize;
+		int rotationConfiguration;
 		std::vector<std::vector<int>> grid;
 		std::pair<int, int> coords;
 

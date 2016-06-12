@@ -101,6 +101,14 @@ namespace Tminos
 		return true;
 	}
 
+	void Tminos::Tetromino::resetRotation()
+	{
+		while (rotationConfiguration != 0)
+		{
+			tempRotation(Direction::RIGHT);
+		}
+	}
+
 	/* Checks if it is possible to shift a tetromino in a certain direction, 
 	   then shifts the tetromino if the resulting position is valid.
 	*/
@@ -191,6 +199,7 @@ namespace Tminos
 					int y = i / gridSize;
 					rotated[y][gridSize - 1 - x] = grid[x][y];
 				}
+				rotationConfiguration = ((rotationConfiguration - 1) % 4 + 4) % 4;
 				break;
 
 			case Direction::RIGHT:
@@ -199,6 +208,7 @@ namespace Tminos
 					int y = i / gridSize;
 					rotated[gridSize - 1 - y][x] = grid[x][y];
 				}
+				rotationConfiguration = ((rotationConfiguration + 1) % 4 + 4) % 4;
 				break;
 
 			default:

@@ -163,6 +163,7 @@ inline void Game::processEvents(sf::RenderWindow& window)
 			case sf::Keyboard::X:
 				if (!usedHold)
 				{
+					current.resetRotation();
 					if (!hold.hasContents()) {
 						hold.setTetromino(current);
 						current = queue.dequeue();
