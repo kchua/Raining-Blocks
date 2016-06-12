@@ -67,18 +67,32 @@ int Game::start(sf::RenderWindow& window)
 	{
 		processEvents(window);
 
-		if (clock.getElapsedTime().asSeconds() > sf::seconds(0.5).asSeconds())
+		if (!inLockPhase && clock.getElapsedTime().asSeconds() > sf::seconds(0.5).asSeconds())
 		{
-			if (!current.translate(Tminos::Tetromino::Direction::DOWN, b)) {
-				locked = true;
-				current.depositBlocks(b);
+			current.translate(Tminos::Tetromino::Direction::DOWN, b);
+			if (!currentMovableUnderGravity())
+			{
+				inLockPhase = true;
 			}
 			clock.restart();
 		}
 
-		if (locked) {
-			processLock(window);
-			usedHold = false;
+		if (inLockPhase) {
+			if (clock.getElapsedTime().asSeconds() > sf::seconds(1).asSeconds())
+			{
+				current.depositBlocks(b);
+				processLock(window);
+				inLockPhase = false;
+				usedHold = false;
+				clock.restart();
+			}
+			else
+			{
+				if (currentMovableUnderGravity()) 
+				{
+					inLockPhase = false;
+				}
+			}
 		}
 
 		render(window);
@@ -182,26 +196,31 @@ inline void Game::processEvents(sf::RenderWindow& window)
 					if (!hold.hasContents()) {
 						hold.setTetromino(current);
 						current = queue.dequeue();
-						updateNext();	
+						updateNext();
 					}
 					else
 					{
 						Tminos::Tetromino temp = hold.getTetromino();
 						hold.setTetromino(current);
-						current = temp;						
+						current = temp;
 					}
 
 					if (!current.setLocation(4, 0, b)) // Game Over
 					{
 						window.close();
 					}
-					locked = false;
+					changed = true;
 					usedHold = true;
 					clock.restart();
 				}
 
 			default:
 				break;
+			}
+
+			if (inLockPhase && changed)
+			{
+				clock.restart();
 			}
 		}
 
@@ -237,9 +256,22 @@ inline void Game::processLock(sf::RenderWindow& window)
 		window.close();
 	}
 	updateNext();
-	locked = false;
+	inLockPhase = false;
 	std::this_thread::sleep_for(std::chrono::milliseconds(250));
 	clock.restart();
+}
+
+inline bool Game::currentMovableUnderGravity()
+{
+	if (!current.translate(Tminos::Tetromino::Direction::DOWN, b))
+	{
+		return false;
+	}
+	else
+	{
+		current.translate(Tminos::Tetromino::Direction::UP, b);
+		return true;
+	}
 }
 
 int main()

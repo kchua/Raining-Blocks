@@ -63,9 +63,9 @@ private:
 	void render(sf::RenderWindow& window);
 	void processEvents(sf::RenderWindow& window);
 	void processLock(sf::RenderWindow& window);
+	bool currentMovableUnderGravity();
 
 	bool inLockPhase;
-	bool locked;
 };
 
 #endif
