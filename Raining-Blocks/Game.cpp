@@ -4,42 +4,56 @@
 #include <chrono>
 
 Game::Game(sf::RenderWindow& window, sf::Font font)
-	: b(), queue(), display(20), next(4), scores(20, 500, font)
+	: b(), queue(), display(20), next(4), scores(200, 450, font)
 {
-	if (!texture.loadFromFile("wallpaper.jpg"))
+	const int blockSize = 48;                                                             // Reduce magic numbers, easy window resizing.
+	const int largeDisplaySize = 30;
+	const int smallDisplaySize = 20;
+	const int blockMargin = 4;
+	constexpr int halfField = (10 * blockSize + 9 * blockMargin) / 2;
+	int screenMiddle = window.getSize().x / 2;
+	int largeDisplayOffset = (screenMiddle - halfField - (5 * largeDisplaySize)) / 2;
+
+	if (!texture.loadFromFile("wallpaper.jpg"))											  // Load wallpaper
 	{
 		throw std::exception("Image not found.");
 	}
 	background = sf::Sprite(texture);
 
-	window.clear();
+	scores.setPosition((screenMiddle - halfField - 200) / 2, 500);
+
 	current = queue.dequeue();
+	updateNext();
 	current.setLocation(4, 0, b);
 
-	next[0].setBlockSize(20);
-	next[0].setLocation(800, 75);
+	next[0].setBlockSize(largeDisplaySize);
+	next[0].setLocation(halfField + screenMiddle + largeDisplayOffset, 200);
 	for (int i = 1; i < 4; i++)
 	{
-		next[i].setBlockSize(16);
-		next[i].setLocation(810, 200 + 100 * (i - 1));
+		next[i].setBlockSize(smallDisplaySize);
+		next[i].setLocation(
+			halfField + screenMiddle + largeDisplayOffset + 5 * (largeDisplaySize - smallDisplaySize) / 2,
+			375 + 125 * (i - 1));
 	}
 
-	hold.setBlockSize(20);
-	hold.setLocation(65, 75);
+	hold.setBlockSize(largeDisplaySize);
+	hold.setLocation(largeDisplayOffset, 200);
 
+	window.clear();
 	window.draw(background);
 	for (int i = 0; i < 20; i++)
 	{
 		display[i] = std::vector<sf::RectangleShape>(12);
 		for (int j = 0; j < 10; j++)
 		{
-			display[i][j] = sf::RectangleShape(sf::Vector2f(45, 45));
-			display[i][j].setPosition(500 - 259 + 52 * j, 75 + 52 * i);
+			display[i][j] = sf::RectangleShape(sf::Vector2f(blockSize, blockSize));
+			display[i][j].setPosition(
+				screenMiddle - halfField + (blockMargin + blockSize) * j,
+				75 + (blockMargin + blockSize) * i);
 			display[i][j].setFillColor(sf::Color(20, 20, 20, 100));
 			window.draw(display[i][j]);
 		}
 	}
-	updateNext();
 	showNext(window);
 	scores.display(window);
 	window.display();
@@ -228,7 +242,7 @@ inline void Game::processLock(sf::RenderWindow& window)
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1000, 1200), "Tetris");
+	sf::RenderWindow window(sf::VideoMode(1300, 1200), "Tetris");
 	sf::Music music;
 	sf::Font font;
 

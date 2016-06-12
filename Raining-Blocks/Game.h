@@ -34,6 +34,7 @@ private:
 	{
 	public:
 		ScoreBoard(int x, int y, sf::Font& f);
+		void setPosition(int x, int y);
 		void addScore(int inc);
 		void addLines(int inc);
 		int getScore();

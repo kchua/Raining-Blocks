@@ -3,10 +3,8 @@
 Game::ScoreBoard::ScoreBoard(int x, int y, sf::Font& f)
 {
 	this->font = f;
-	coords = std::pair<int, int>(x, y);
 
-	back = sf::RectangleShape(sf::Vector2f(200, 450));
-	back.setPosition(x, y);
+	back = sf::RectangleShape(sf::Vector2f(x, y));
 	back.setFillColor(sf::Color(20, 20, 20, 100));
 	back.setOutlineThickness(3);
 	back.setOutlineColor(sf::Color::White);
@@ -48,15 +46,22 @@ Game::ScoreBoard::ScoreBoard(int x, int y, sf::Font& f)
 	levelText.setCharacterSize(50);
 	resetOrigin(levelText);
 
-	scoreLabel.setPosition(coords.first + 100, coords.second + 20);
-	linesLabel.setPosition(coords.first + 100, coords.second + 160);
-	levelLabel.setPosition(coords.first + 100, coords.second + 310);
-	scoreText.setPosition(coords.first + 100, coords.second + 75);
-	linesText.setPosition(coords.first + 100, coords.second + 210);
-	levelText.setPosition(coords.first + 100, coords.second + 370);
-
 	score = 0;
 	lines = 0;
+}
+
+void Game::ScoreBoard::setPosition(int x, int y)
+{
+	coords = std::pair<int, int>(x, y);
+	back.setPosition(sf::Vector2f(x, y));
+
+	int xOffset = back.getLocalBounds().width / 2;
+	scoreLabel.setPosition(coords.first + xOffset, coords.second + 20);
+	linesLabel.setPosition(coords.first + xOffset, coords.second + 160);
+	levelLabel.setPosition(coords.first + xOffset, coords.second + 310);
+	scoreText.setPosition(coords.first + xOffset, coords.second + 75);
+	linesText.setPosition(coords.first + xOffset, coords.second + 210);
+	levelText.setPosition(coords.first + xOffset, coords.second + 370);
 }
 
 void Game::ScoreBoard::addScore(int inc)
