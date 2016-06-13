@@ -133,10 +133,37 @@ inline void Game::showNext(sf::RenderWindow& window)
 	window.draw(nextText);
 }
 
+inline sf::Color Game::getOverlayColor()
+{
+	int currLevel = std::min(scores.getLevel(), 20);
+	if (currLevel <= 5)
+	{
+		return sf::Color::Transparent;
+	}
+	else if (currLevel <= 10)
+	{
+		return sf::Color(0, 255, 100, 50);
+	}
+	else if (currLevel <= 15)
+	{
+		return sf::Color(200, 104, 51, 100);
+	}
+	else
+	{
+		return sf::Color(255, 0, 0, 50);
+	}
+}
+
 inline void Game::render(sf::RenderWindow& window)
 {
 	window.clear();
 	window.draw(background);
+	
+	sf::RectangleShape overlay(sf::Vector2f(1500, 1300));
+	overlay.setFillColor(getOverlayColor());
+	overlay.setPosition(0, 0);
+	window.draw(overlay);
+
 	for (int x = 0; x < 10; x++)
 	{
 		for (int y = 0; y < 20; y++)

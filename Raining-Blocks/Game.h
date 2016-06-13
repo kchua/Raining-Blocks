@@ -63,6 +63,7 @@ private:
 
 	void updateNext();
 	void showNext(sf::RenderWindow& window);
+	sf::Color getOverlayColor();
 	void render(sf::RenderWindow& window);
 	void processEvents(sf::RenderWindow& window);
 	void processLock(sf::RenderWindow& window);
