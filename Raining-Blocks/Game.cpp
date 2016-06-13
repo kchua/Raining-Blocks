@@ -81,7 +81,8 @@ int Game::start(sf::RenderWindow& window)
 	{
 		processEvents(window);
 
-		if (!inLockPhase && clock.getElapsedTime().asSeconds() > sf::seconds(0.5).asSeconds())
+		if (!inLockPhase && clock.getElapsedTime().asSeconds() > 
+			sf::seconds(std::max(0.05, 1 - (0.95 / 20) * scores.getLevel())).asSeconds())
 		{
 			current.translate(Tminos::Tetromino::Direction::DOWN, b);
 			if (!currentMovableUnderGravity())
