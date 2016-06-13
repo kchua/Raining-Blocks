@@ -330,17 +330,15 @@ int main()
 	sf::Music music;
 	sf::Font font;
 
-	if (!music.openFromFile("tetris.ogg")) {
-		return -1;
+	if (music.openFromFile("tetris.ogg")) {	
+		music.setLoop(true);
+		music.play();
 	}
 
 	if (!font.loadFromFile("Gasalt-Regular.ttf")) {
 		return -1;
 	}
 	
-	music.setLoop(true);
-	music.play();
-
 	Game game(window, font);
 
 	game.start(window);
