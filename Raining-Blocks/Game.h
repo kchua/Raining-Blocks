@@ -20,6 +20,7 @@ private:
 	sf::RenderWindow window;
 	sf::Clock clock;
 	std::vector<std::vector<sf::RectangleShape>> display;
+	std::vector<int> scoreValues;
 
 	Board b;
 	TetrominoBag queue;

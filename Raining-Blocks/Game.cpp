@@ -4,12 +4,12 @@
 #include <chrono>
 
 Game::Game(sf::RenderWindow& window, sf::Font& font)
-	: b(), queue(), display(20), next(4), scores(200, 450, font)
+	: b(), queue(), display(20), next(4), scores(200, 450, font), scoreValues{0, 40, 100, 300, 1200}
 {
-	const int blockSize = 48;                                                             // Reduce magic numbers, easy window resizing.
+	const int blockSize = 53;                                                             // Reduce magic numbers, easy window resizing.
 	const int largeDisplaySize = 30;
 	const int smallDisplaySize = 20;
-	const int blockMargin = 4;
+	const int blockMargin = 5;
 	constexpr int halfField = (10 * blockSize + 9 * blockMargin) / 2;
 	int screenMiddle = window.getSize().x / 2;
 	int largeDisplayOffset = (screenMiddle - halfField - (5 * largeDisplaySize)) / 2;
@@ -20,7 +20,7 @@ Game::Game(sf::RenderWindow& window, sf::Font& font)
 	}
 	background = sf::Sprite(texture);
 
-	scores.setPosition((screenMiddle - halfField - 200) / 2, 500);
+	scores.setPosition((screenMiddle - halfField - 200) / 2, 775);
 
 	current = queue.dequeue();
 	updateNext();
@@ -249,10 +249,14 @@ inline void Game::processEvents(sf::RenderWindow& window)
 inline void Game::processLock(sf::RenderWindow& window)
 {
 	int minLineNum = current.getLocation().second;
+	int numLineClears = 0;
+	int currLevel = scores.getLevel();
+
 	for (int i = std::max(minLineNum, 2); i < std::min(minLineNum + current.getGridSize(), 22); i++)
 	{
 		if (b.isLineClear(i))
 		{
+			numLineClears++;
 			b.removeLine(i);
 			for (int j = 0; j < 10; j++)
 			{
@@ -266,6 +270,8 @@ inline void Game::processLock(sf::RenderWindow& window)
 			scores.addLines(1);
 		}
 	}
+	scores.addScore(currLevel * scoreValues[numLineClears]);
+
 	current = queue.dequeue();
 	if (!current.setLocation(4, 0, b)) // Game Over
 	{
@@ -292,7 +298,7 @@ inline bool Game::currentMovableUnderGravity()
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1200, 1200), "Tetris");
+	sf::RenderWindow window(sf::VideoMode(1500, 1300), "Tetris");
 	sf::Music music;
 	sf::Font font;
 
